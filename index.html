@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quer Casar Comigo?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f3ef;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            color: #5b4033;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            top: 10%;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            color: #5b4033;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: #a67b5b;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background-color: #8c6247;
+        }
+        #yesButton {
+            position: relative;
+            z-index: 2; /* Garante que o botão SIM fique acima do botão NÃO */
+        }
+        #noButton {
+            position: relative;
+            z-index: 1; /* Garante que o botão NÃO fique abaixo do botão SIM */
+        }
+        #message {
+            display: none;
+            font-size: 1.5rem;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #f8f3ef;
+            border: 2px solid #a67b5b;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 50px auto;
+            color: #5b4033;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #a67b5b;
+            animation: confetti-fall 5s infinite;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Você quer casar comigo?</h1>
+        <div class="buttons">
+            <button id="yesButton" onclick="showMessage()">SIM</button>
+            <button id="noButton" onmouseover="moveButton()">NÃO</button>
+        </div>
+        <div id="message">
+            E se eu pudesse escolher novamente, escolheria você, nesta vida e em todas as outras. Em todas as próximas, em todos os universos e em todas as estrelas. Porque você é meu destino, meu presente e minha eternidade. Eu te amo para todo sempre, esse é só o começo da nossa história de amor juntos. Obrigada por tudo. Eu te amo!
+        </div>
+    </div>
+    <script>
+        let moveCount = 0;
+        const maxMoves = 8; // Total de movimentos antes de desaparecer
+        const noButton = document.getElementById('noButton');
+
+        // Coordenadas fixas para o padrão de movimento
+        const positions = [
+            { top: '10%', left: '10%' },
+            { top: '10%', left: '80%' },
+            { top: '50%', left: '10%' },
+            { top: '50%', left: '80%' },
+            { top: '80%', left: '10%' },
+            { top: '80%', left: '80%' },
+            { top: '30%', left: '50%' },
+            { top: '70%', left: '50%' }
+        ];
+
+        function moveButton() {
+            if (moveCount < maxMoves) {
+                const pos = positions[moveCount];
+                noButton.style.position = 'absolute'; // Certifica-se de que o botão se move corretamente
+                noButton.style.top = pos.top;
+                noButton.style.left = pos.left;
+                noButton.style.transition = 'top 0.1s ease, left 0.1s ease'; // Aumenta a velocidade do movimento
+                moveCount++;
+            }
+            if (moveCount >= maxMoves) {
+                setTimeout(() => {
+                    noButton.style.display = 'none'; // Remove o botão após a 9ª interação
+                }, 100); // Pequeno atraso para garantir a visibilidade
+            }
+        }
+
+        function showMessage() {
+            const message = document.getElementById('message');
+            message.style.display = 'block';
+            createConfetti();
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * window.innerWidth}px`;
+                confetti.style.top = `${Math.random() * window.innerHeight - 100}px`;
+                confetti.style.backgroundColor = getRandomColor();
+                document.body.appendChild(confetti);
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['#a67b5b', '#8c6247', '#d9c2b0', '#f4e7dc', '#5b4033'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Atualizar o tamanho do botão quando a janela é redimensionada
+        window.addEventListener('resize', () => {
+            noButton.style.top = '10%'; // Reposicionar o botão ao redimensionar
+            noButton.style.left = '50%';
+            noButton.style.transform = 'translate(-50%, -50%)';
+        });
+    </script>
+</body>
+</html>
